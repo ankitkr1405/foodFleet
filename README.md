@@ -283,9 +283,6 @@ This **pauses but does not delete** your pods.
 
 ---
 
-## 👨‍💻 Author
-
-Developed with ❤️ by Ajay Kumar (Cloud Computing Project).
 
 
 ---
