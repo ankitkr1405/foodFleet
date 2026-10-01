@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customer Dashboard - DineDash</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Customer Dashboard</h1>
+  <nav>
+    <a href="index.html">Home</a> | 
+    <a href="customer.html">Customer</a>
+  </nav>
+  <script>
+    // Check if the user is authenticated and has the 'customer' role
+    if (sessionStorage.getItem('authenticated') !== 'true' || sessionStorage.getItem('role') !== 'customer') {
+      alert("Access denied. Please log in as a customer.");
+      window.location.href = "index.html?role=customer";
+    }
+  </script>
+
+<section>
+  <p>User: <span id="usernameDisplay"></span></p>
+
+  <button id="logoutBtn">Logout</button>
+</section>
+  <script>
+    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem('username') || 'Unknown';
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.clear();
+      window.location.href = "index.html?role=customer";
+    });
+  </script>
+  <section>
+    <h2>View Restaurants & Orders</h2>
+    <button onclick="getData('restaurants')">Get Restaurants</button>
+    <button onclick="getData('orders')">View Orders</button>
+    <pre id="ordersOutput"></pre>
+  </section>
+
+  <section>
+    <h2>View Menu</h2>
+    <form id="viewMenuForm">
+      <input type="number" id="menuRestaurantId" placeholder="Restaurant ID" required>
+      <button type="submit">Get Menu</button>
+    </form>
+    <pre id="menuOutput"></pre>
+  </section>
+
+  <section>
+    <h2>Place Order</h2>
+    <form id="placeOrderForm">
+      <input type="number" id="orderRestaurantId" placeholder="Restaurant ID" required>
+      <input type="text" id="customerName" placeholder="Your Name" required>
+      <input type="text" id="orderItemIds" placeholder="Menu Item IDs (comma separated)" required>
+      <button type="submit">Place Order</button>
+    </form>
+    <pre id="orderResult"></pre>
+  </section>
+
+  <section>
+    <h2>Cancel Order</h2>
+    <form id="cancelOrderForm">
+      <input type="number" id="cancelOrderId" placeholder="Order ID" required>
+      <button type="submit">Cancel Order</button>
+    </form>
+    <pre id="orderCancelResult"></pre>
+  </section>
+
+  
+
+  <script src="js/main.js"></script>
+</body>
+</html>

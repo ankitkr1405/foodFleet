@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  gateway:
+    build: ./gateway
+    container_name: gateway-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth
+      - delivery
+      - order
+      - restaurant
+      - sqlt
+    networks:
+      - foodnet
+
+  auth:
+    build: ./services/auth
+    container_name: auth-container
+    ports:
+      - "8004:8004"
+    depends_on:
+      - sqlt
+    networks:
+      - foodnet
+
+  delivery:
+    build: ./services/delivery
+    container_name: delivery-container
+    ports:
+      - "8003:8003"
+    depends_on:
+      - sqlt
+    networks:
+      - foodnet
+
+  order:
+    build: ./services/order
+    container_name: order-container
+    ports:
+      - "8002:8002"
+    depends_on:
+      - sqlt
+    networks:
+      - foodnet
+
+  restaurant:
+    build: ./services/restaurant
+    container_name: restaurant-container
+    ports:
+      - "8001:8001"
+    depends_on:
+      - sqlt
+    networks:
+      - foodnet
+
+  sqlt:
+    build: ./sqlt
+    container_name: sqlt-container
+    ports:
+      - "8000:8000"
+    networks:
+      - foodnet
+
+networks:
+  foodnet:
+    driver: bridge

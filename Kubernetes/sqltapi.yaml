@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlt-container
+  labels:
+    app: sqlt-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqlt-container
+  template:
+    metadata:
+      labels:
+        app: sqlt-container
+    spec:
+      containers:
+      - name: sqlt-container
+        image: dinedash-sqlt:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "300m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlt-container
+spec:
+  selector:
+    app: sqlt-container
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP

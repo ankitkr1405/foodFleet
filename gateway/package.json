@@ -1,0 +1,13 @@
+{
+    "name": "gateway",
+    "version": "1.0.0",
+    "description": "Node.js gateway to unify food delivery microservices",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "http-proxy": "^1.18.1"
+    }
+  }
+  

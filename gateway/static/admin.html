@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - DineDash</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <nav>
+    <a href="index.html">Home</a> | 
+    <a href="admin.html">Admin</a>
+  </nav>
+  <script>
+    // Check if the user is authenticated and has the 'admin' role
+    if (sessionStorage.getItem('authenticated') !== 'true' || sessionStorage.getItem('role') !== 'admin') {
+      alert("Access denied. Please log in as an admin.");
+      window.location.href = "index.html?role=admin";
+    }
+  </script>
+  <section>
+  <p>User: <span id="usernameDisplay"></span></p>
+  <button id="logoutBtn">Logout</button>
+  </section>
+
+  
+  <script>
+    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem('username') || 'Unknown';
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.clear();
+      window.location.href = "index.html?role=admin";
+    });
+  </script>
+  <section>
+    <h2>Add Restaurant</h2>
+    <form id="addRestaurantForm">
+      <input type="text" id="rName" placeholder="Restaurant Name" required>
+      <input type="text" id="rAddress" placeholder="Address" required>
+      <input type="text" id="rCat" placeholder="Catagory" required>
+      <button type="submit">Add Restaurant</button>
+    </form>
+    <pre id="restaurantResult"></pre>
+  </section>
+
+  <section>
+    <h2>Add Menu Item</h2>
+    <form id="addMenuForm">
+      <input type="number" id="menuRestaurantId" placeholder="Restaurant ID" required>
+      <input type="text" id="menuName" placeholder="Menu Item Name" required>
+      <input type="number" step="0.01" id="menuPrice" placeholder="Price" required>
+      <input type="text" id="menuDesc" placeholder="Menu Item Description" required>
+      <button type="submit">Add Menu Item</button>
+    </form>
+    <pre id="menuResult"></pre>
+  </section>
+
+  <section>
+    <h2>Update Delivery Status</h2>
+    <form id="updateDeliveryForm">
+      <input type="number" id="updOrderId" placeholder="Order ID" required>
+      <input type="text" id="newStatus" placeholder="New Status" required>
+      <button type="submit">Update Status</button>
+    </form>
+    <pre id="deliveryUpdateResult"></pre>
+  </section>
+
+  <section>
+    <h2>Cancel Order</h2>
+    <form id="cancelOrderForm">
+      <input type="number" id="cancelOrderId" placeholder="Order ID" required>
+      <button type="submit">Cancel Order</button>
+    </form>
+    <pre id="orderCancelResult"></pre>
+  </section>
+
+  <section>
+    <h2>View Data</h2>
+    <button onclick="getData('restaurants')">View Restaurants</button>
+    <button onclick="getData('orders')">View Orders</button>
+    <button onclick="getData('deliveries')">View Deliveries</button>
+    <pre id="viewDataResult"></pre>
+  </section>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

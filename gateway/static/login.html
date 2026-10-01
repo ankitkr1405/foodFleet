@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - DineDash</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>DineDash Login</h1>
+  <form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br>
+    <button type="submit">Login</button>
+  </form>
+  <script>
+    // Determine role from URL query string (e.g., ?role=admin)
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role') || 'customer';
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const payload = { username, password };
+
+      // Choose the endpoint based on role
+      const endpoint = role === 'admin' ? '/auth/admin' : '/auth/customer';
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (result === true) {
+          // Store session details in sessionStorage
+          sessionStorage.setItem('authenticated', 'true');
+          sessionStorage.setItem('role', role);
+          sessionStorage.setItem('username', username);
+          // Redirect based on role if authentication succeeds
+          window.location.href = role === 'admin' ? "admin.html" : "customer.html";
+        } else {
+          alert('Authentication failed');
+        }
+      } catch (error) {
+        console.error("Error during authentication:", error);
+        alert("An error occurred. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

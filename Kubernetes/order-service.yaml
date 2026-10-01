@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-container-deployment
+  labels:
+    app: order-container
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order-container
+  template:
+    metadata:
+      labels:
+        app: order-container
+    spec:
+      containers:
+      - name: order-container
+        image: dinedash-order:latest   # Update with your image details
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8002
+        readinessProbe:
+          tcpSocket:
+            port: 8002
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8002
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "300m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-container
+spec:
+  selector:
+    app: order-container
+  ports:
+  - protocol: TCP
+    port: 8002
+    targetPort: 8002
